@@ -1,4 +1,5 @@
 'use strict';
+var secrets = require('../secrets/secrets.json');
 
 var router = require('express').Router();
 var passport = require('passport');

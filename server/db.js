@@ -1,6 +1,6 @@
 
 'use strict';
-
+var secrets = require('./secrets/secrets.json');
 var mongoose = require('mongoose');
 var Promise = require('bluebird'); 
 Promise.promisifyAll(mongoose);

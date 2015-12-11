@@ -1,6 +1,6 @@
 
 'use strict'; 
-
+var secrets = require('../secrets/secrets.json');
 var router = require('express').Router(),
   session = require('express-session'),
   passport = require('passport');
@@ -20,7 +20,7 @@ router.use(function (req, res, next) {
 });
 
 router.use(session({
-  secret: 'tongiscool',
+  secret: secrets.sessionSecret,
   //XXXXX ^^^^
   resave: false,
   saveUninitialized: false

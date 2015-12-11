@@ -3,6 +3,7 @@
 var router = require('express').Router();
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var secrets = require('../secrets/secrets.json');
 
 var User = require('../api/users/user.model');
 
