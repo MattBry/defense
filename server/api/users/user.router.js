@@ -6,6 +6,16 @@ var router = require('express').Router(),
 var HttpError = require('../../utils/HttpError');
 var User = require('./user.model');
 
+
+//guests up here
+router.post('/', Auth.assertUser, function (req, res, next) {
+    User.create(req.body)
+    .then(function (user) {
+        res.status(201).json(user);
+    })
+    .then(null, next);
+});
+
 router.param('id', function (req, res, next, id) {
 	User.findById(id).exec()
 	.then(function (user) {
@@ -24,14 +34,6 @@ router.get('/', function (req, res, next) {
 	.then(null, next);
 });
 
-router.post('/', function (req, res, next) {
-	User.create(req.body)
-	.then(function (user) {
-		res.status(201).json(user);
-	})
-	.then(null, next);
-});
-
 router.get('/:id', function (req, res, next) {
 	req.requestedUser.getStories()
 	.then(function (stories) {
@@ -42,19 +44,37 @@ router.get('/:id', function (req, res, next) {
 	.then(null, next);
 });
 
+router.delete('/:id', function (req, res, next) {
+	req.requestedUser.remove()
+	.then(function () {
+		res.status(204).end();
+	})
+	.then(null, next);
+});
+
+router.post('/', Auth.assertAdmin, function (req, res, next) {
+    User.create(req.body)
+    .then(function (user) {
+        res.status(201).json(user);
+    })
+    .then(null, next);
+});
+
+//NOT ALLOWED
+
+router.post('/', function (req, res, next) {
+	User.create(req.body)
+	.then(function (user) {
+		res.status(201).json(user);
+	})
+	.then(null, next);
+});
+
 router.put('/:id', function (req, res, next) {
 	_.extend(req.requestedUser, req.body);
 	req.requestedUser.save()
 	.then(function (user) {
 		res.json(user);
-	})
-	.then(null, next);
-});
-
-router.delete('/:id', function (req, res, next) {
-	req.requestedUser.remove()
-	.then(function () {
-		res.status(204).end();
 	})
 	.then(null, next);
 });

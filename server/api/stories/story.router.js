@@ -24,6 +24,24 @@ router.get('/', function (req, res, next) {
 	.then(null, next);
 });
 
+router.get('/:id', function (req, res, next) {
+	req.story.populateAsync('author')
+	.then(function (story) {
+		res.json(story);
+	})
+	.then(null, next);
+});
+
+router.post('/', Auth.assertAdmin, function (req, res, next) {
+    User.create(req.body)
+    .then(function (user) {
+        res.status(201).json(user);
+    })
+    .then(null, next);
+});
+
+//NOT ALLOWED
+
 router.post('/', function (req, res, next) {
 	Story.create(req.body)
 	.then(function (story) {
@@ -31,14 +49,6 @@ router.post('/', function (req, res, next) {
 	})
 	.then(function (populated) {
 		res.status(201).json(populated);
-	})
-	.then(null, next);
-});
-
-router.get('/:id', function (req, res, next) {
-	req.story.populateAsync('author')
-	.then(function (story) {
-		res.json(story);
 	})
 	.then(null, next);
 });
@@ -59,5 +69,4 @@ router.delete('/:id', function (req, res, next) {
 	})
 	.then(null, next);
 });
-
 module.exports = router;
